@@ -1,13 +1,6 @@
 'use strict';
 
-const { Account, Subscription } = require('../models');
-
-exports.getRating = async (req, res) => {
-  const accounts = await Account.findAll({
-    order: ['balance_usd_sub']
-  });
-  res.send(accounts);
-};
+const { Subscription } = require('../models');
 
 exports.subscribe = async (req, res) => {
   const { login, source, r_login, r_source } = req.body;

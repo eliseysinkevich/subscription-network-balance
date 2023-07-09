@@ -2,9 +2,8 @@
 
 const { Router } = require('express');
 const router = Router();
-const controller = require('../controllers/main-controller');
+const controller = require('../controllers/subscription-controller');
 
-router.get('/rating', controller.getRating);
 router.post('/subscribe', controller.subscribe);
 router.post('/unsubscribe', controller.unsubscribe);
 

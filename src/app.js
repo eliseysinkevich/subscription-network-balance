@@ -8,7 +8,8 @@ require('express-async-errors');
 
 JSON = require('json-bigint')({ useNativeBigInt: true });
 
-const router = require('./routers/main-router');
+const accountRouter = require('./routers/account-router');
+const subscriptionRouter = require('./routers/subscription-router');
 
 const app = express();
 
@@ -16,7 +17,9 @@ app.use(cors());
 app.use(compression());
 app.use(bodyParser.json({ limit: '200kb' }));
 
-app.use(router);
+app.use(accountRouter);
+app.use(subscriptionRouter);
+
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).send(err);
