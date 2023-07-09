@@ -17,7 +17,11 @@ module.exports = (sequelize, DataTypes) => {
     login: {
       type: DataTypes.BIGINT,
       primaryKey: true,
-      autoIncrement: false
+      autoIncrement: false,
+      get() {
+        const value = this.getDataValue('login');
+        return BigInt(value);
+      }
     },
     source: {
       type: DataTypes.INTEGER,
@@ -30,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Account',
-    tableName:'account',
+    tableName: 'account',
     underscored: true,
   });
   return Account;

@@ -6,6 +6,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('express-async-errors');
 
+JSON = require('json-bigint')({ useNativeBigInt: true });
+
 const router = require('./routers/main-router');
 
 const app = express();
