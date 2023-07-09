@@ -1,0 +1,30 @@
+{
+  "development": {
+    "username": "root",
+    "password": "root",
+    "database": "subscription",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "migrationStorageTableName": "sequelize_meta",
+    "seederStorage": "sequelize",
+    "seederStorageTableName": "sequelize_data",
+    "define": {
+      "underscored": true,
+      "freezeTableName": true
+    }
+  },
+  "test": {
+    "username": "root",
+    "password": "root",
+    "database": "subscription",
+    "host": "127.0.0.1",
+    "dialect": "mysql",
+    "migrationStorageTableName": "sequelize_meta",
+    "seederStorage": "sequelize",
+    "seederStorageTableName": "sequelize_data",
+    "define": {
+      "underscored": true,
+      "freezeTableName": true
+    }
+  }
+}
