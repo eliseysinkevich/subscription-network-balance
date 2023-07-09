@@ -4,7 +4,7 @@
 module.exports = {
   async up(queryInterface) {
     await queryInterface.sequelize.transaction(async (transaction) => {
-      await queryInterface.sequelize.query(`INSERT INTO \`account\` VALUES 
+      await queryInterface.sequelize.query(`INSERT INTO \`account\` (\`login\`, \`source\`, \`balance_usd\`, \`balance_usd_sub\`) VALUES 
       ('60000000000060839', '203', '20', '0'),
       ('60000000000060840', '203', '10', '0'),
       ('60000000000061841', '203', '20', '0'),

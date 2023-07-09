@@ -2,6 +2,9 @@
 const {
   Model
 } = require('sequelize');
+
+const { getBigInt } = require('../utils');
+
 module.exports = (sequelize, DataTypes) => {
   class Account extends Model {
     /**
@@ -17,15 +20,17 @@ module.exports = (sequelize, DataTypes) => {
     login: {
       type: DataTypes.BIGINT,
       primaryKey: true,
+      allowNull: false,
       autoIncrement: false,
-      get() {
-        const value = this.getDataValue('login');
-        return BigInt(value);
-      }
+      validate: {
+        isNumeric: true
+      },
+      get: getBigInt
     },
     source: {
       type: DataTypes.INTEGER,
       primaryKey: true,
+      allowNull: false,
       autoIncrement: false
     },
     balance_usd: DataTypes.DOUBLE,
@@ -36,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'Account',
     tableName: 'account',
     underscored: true,
+    timestamps: false
   });
   return Account;
 };
