@@ -34,6 +34,6 @@ module.exports = {
   },
 
   async down(queryInterface) {
-    await queryInterface.sequelize.query(`UPDATE account SET balance_usd_sub = 0, subscribers_count = 0;`);
+    await queryInterface.sequelize.query('UPDATE account SET balance_usd_sub = 0, subscribers_count = 0;');
   }
 };

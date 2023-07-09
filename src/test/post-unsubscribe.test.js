@@ -34,7 +34,7 @@ describe('POST /unsubscribe', () => {
         r_source: 203
       });
     expect(res.statusCode).toBe(400);
-    expect(res.body.message).toBe(`One of required parameters login, source, r_login, r_source is not passed`);
+    expect(res.body.message).toBe('One of required parameters login, source, r_login, r_source is not passed');
   });
 
   afterEach(async () => {

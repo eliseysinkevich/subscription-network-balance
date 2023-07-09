@@ -1,4 +1,6 @@
-exports.getBigInt = function (key, options) {
+'use strict';
+
+exports.getBigInt = function (key) {
   const value = this.getDataValue(key);
   try {
     return BigInt(value);
