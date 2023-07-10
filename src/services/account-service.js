@@ -3,11 +3,23 @@
 const createError = require('http-errors');
 
 const { sequelize, Account } = require('../models');
+const { Transaction } = require('sequelize');
 
+/**
+ * Return accounts, sorted by network balance + subscribers count
+ * @returns {Promise<Array<Account>>}
+ */
 exports.getRating = () => {
   return Account.findAll({ order: ['balance_usd_sub'] });
 };
 
+/**
+ * Change account balance, recalculate network balance
+ * @param {Object} account - account
+ * @param {BigInt} account.login
+ * @param {number} account.source
+ * @param {number} account.balance_usd
+ */
 exports.updateBalance = async ({ login, source, balance_usd }) => {
   const account = await this.findOne({ login, source });
 
@@ -16,6 +28,12 @@ exports.updateBalance = async ({ login, source, balance_usd }) => {
   });
 };
 
+/**
+ * Find an account by login and source
+ * @param {Object} account
+ * @param {BigInt} account.login
+ * @param {number} account.source
+ */
 exports.findOne = ({ login, source }) => {
   return Account.findOne({
     where: { login, source },
@@ -23,6 +41,15 @@ exports.findOne = ({ login, source }) => {
   });
 };
 
+/**
+ * Recalculate balance and subscribers count of affected part of network
+ * @param {Object} account
+ * @param {BigInt} account.login
+ * @param {number} account.source
+ * @param {Object} options
+ * @param {boolean} options.countSubscribers - if true, then recalculate subscribers count
+ * @param {Transaction} options.transaction
+ */
 exports.recalculateNetwork = async ({ login, source }, { countSubscribers = false, transaction }) => {
   await sequelize.query(`WITH RECURSIVE a AS (
   SELECT login,
@@ -61,17 +88,19 @@ SET balance_usd_sub = (
     SELECT sum(b.balance_usd)
     FROM b
     WHERE c.login = b.base_login AND c.source = b.base_source
-  ),
-  subscribers_count = (
+  )${countSubscribers ? `, subscribers_count = (
     SELECT COUNT(*)
     FROM b
     WHERE c.login = b.base_login AND c.source = b.base_source
-  )`, {
+  )`: ''}`, {
     replacements: { login, source },
     transaction
   });
 };
 
+/**
+ * hook for recalculating network balance if account balance changed
+ */
 Account.addHook('afterUpdate', async (account, { transaction }) => {
   if (!account._changed.has('balance_usd')) return;
   await this.recalculateNetwork(account, { transaction });
