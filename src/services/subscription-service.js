@@ -6,20 +6,21 @@ const accountService = require('./account-service');
 
 const { sequelize, Subscription } = require('../models');
 
-exports.subscribe = async ({ login, source, r_login, r_source }) => {
-  const subscription = await Subscription.findOne({
-    where: { login, source, r_login, r_source }
-  });
+exports.subscribe = async (input) => {
+  const subscription = await Subscription.findOne({ where: input });
   if (subscription) throw new createError.BadRequest('Subscription is already created');
 
+  await accountService.findOne({ login: input.login, source: input.source });
+  await accountService.findOne({ login: input.r_login, source: input.r_source });
+
   await sequelize.transaction(async (transaction) => {
-    await Subscription.create({ login, source, r_login, r_source }, { transaction });
+    await Subscription.create(input, { transaction });
   });
 };
 
-exports.unsubscribe = async ({ login, source, r_login, r_source }) => {
+exports.unsubscribe = async (input) => {
   const subscription = await Subscription.findOne({
-    where: { login, source, r_login, r_source },
+    where: input,
     rejectOnEmpty: new createError.NotFound('Subscription is not found')
   });
 

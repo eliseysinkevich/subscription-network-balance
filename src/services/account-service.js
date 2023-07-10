@@ -23,13 +23,13 @@ exports.findOne = ({ login, source }) => {
   });
 };
 
-exports.recalculateNetwork = async (account, { countSubscribers = false, transaction }) => {
+exports.recalculateNetwork = async ({ login, source }, { countSubscribers = false, transaction }) => {
   await sequelize.query(`WITH RECURSIVE a AS (
   SELECT login,
     source,
     balance_usd
   FROM account
-  WHERE login = 4 AND source = 1
+  WHERE login = :login AND source = :source
   UNION
   SELECT b.login,
     b.source,
@@ -67,7 +67,7 @@ SET balance_usd_sub = (
     FROM b
     WHERE c.login = b.base_login AND c.source = b.base_source
   )`, {
-    replacements: { login: account.login, source: account.source },
+    replacements: { login, source },
     transaction
   });
 };

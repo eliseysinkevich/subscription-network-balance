@@ -8,3 +8,8 @@ exports.getBigInt = function (key) {
     return value;
   }
 };
+
+exports.validateBigInt = function (value, helpers) {
+  if (!['bigint', 'number'].includes(typeof value)) return helpers.error('any.invalid');
+  return value;
+};
